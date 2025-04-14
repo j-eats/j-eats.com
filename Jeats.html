@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Julia Eats | J-Eats</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #333;
+    }
+
+    header {
+      background: #2e4d35;
+      color: white;
+      text-align: center;
+      padding: 30px 15px;
+    }
+
+    nav {
+      background: #3e5e46;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      padding: 14px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #4CAF50;
+      text-decoration: underline;
+    }
+
+    .hero {
+      background: #e9f1e7;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    h3 {
+      border-bottom: 2px solid #2e4d35;
+      color: #2e4d35;
+      padding-bottom: 6px;
+    }
+
+    .menu, #cart, #checkout-form, #our-story, #location {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .menu-category {
+      margin-top: 30px;
+    }
+
+    .menu-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #ccc;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: #2e4d35;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #4CAF50;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+
+    .remove-btn {
+      background: #b52e2e;
+    }
+
+    .cart-summary {
+      margin-top: 15px;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    footer {
+      background: #2e4d35;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #signup-popup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    #signup-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    #signup-box input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+
+    #signup-box button {
+      width: 90%;
+      padding: 10px;
+    }
+
+    #item-added-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #2e4d35;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: none;
+      animation: fadeinout 2.5s ease-in-out;
+      z-index: 9999;
+    }
+
+    @keyframes fadeinout {
+      0% { opacity: 0; transform: translateY(-10px); }
+      10% { opacity: 1; transform: translateY(0); }
+      90% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    #confirmation {
+      display: none;
+      background: #dff5e1;
+      border: 1px solid #2e4d35;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px;
+      text-align: center;
+    }
+
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    form button {
+      width: 100%;
+    }
+
+    #our-story {
+      background: #f6f9f4;
+      padding: 30px 20px;
+      border-radius: 10px;
+    }
+
+    @media screen and (max-width: 600px) {
+      nav a {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .menu-item, .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      button {
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Email Signup Popup -->
+  <div id="signup-popup">
+    <div id="signup-box">
+      <h2>🔥 10% Off Your First Order!</h2>
+      <p>Join the J-Eats fam & support local flavour.</p>
+      <input type="email" id="email" placeholder="Your Email" />
+      <button onclick="signUp()">Claim Offer</button>
+    </div>
+  </div>
+
+  <div id="item-added-popup">Item added to cart ✅</div>
+
+  <header>
+    <h1>JULIA EATS</h1>
+    <p>Flavor, Hustle & Community</p>
+  </header>
+
+  <nav>
+    <a href="#menu">Menu</a>
+    <a href="#cart"><i class="fas fa-shopping-cart"></i> Cart</a>
+    <a href="#checkout-form">Checkout</a>
+    <a href="#our-story">Our Story</a>
+    <a href="#location">Where We At</a>
+  </nav>
+
+  <section class="hero">
+    <h2>Fresh Food. No Delivery Fees. Just Real Vibes.</h2>
+    <p>Order online & collect in Khayelitsha.</p>
+  </section>
+
+  <div id="confirmation"></div>
+
+  <section id="menu" class="menu">
+    <h3>Our Menu</h3>
+
+    <div class="menu-category">
+      <h4>🍔 J-Burgers</h4>
+      <div class="menu-item"><span>J-Single - R39</span> <button onclick="addToCart('J-Single', 39)">Add</button></div>
+      <div class="menu-item"><span>J-Double - R49</span> <button onclick="addToCart('J-Double', 49)">Add</button></div>
+      <div class="menu-item"><span>J-Triple - R65</span> <button onclick="addToCart('J-Triple', 65)">Add</button></div>
+    </div>
+
+    <div class="menu-category">
+      <h4>🍟 Sides & Combos</h4>
+      <div class="menu-item"><span>J-Chips (Solo) - R20</span> <button onclick="addToCart('J-Chips', 20)">Add</button></div>
+      <div class="menu-item"><span>J-Combo (Burger + Chips) - R50</span> <button onclick="addToCart('J-Combo', 50)">Add</button></div>
+    </div>
+
+    <div class="menu-category">
+      <h4>🌯 Wraps</h4>
+      <div class="menu-item"><span>OG Wrap (Beef) - R45</span> <button onclick="addToCart('OG Wrap', 45)">Add</button></div>
+      <div class="menu-item"><span>Street Wrap (Chicken) - R45</span> <button onclick="addToCart('Street Wrap', 45)">Add</button></div>
+    </div>
+
+    <div class="menu-category">
+      <h4>🔥 Nuggets</h4>
+      <div class="menu-item"><span>6pc Nuggets - R30</span> <button onclick="addToCart('6pc Nuggets', 30)">Add</button></div>
+      <div class="menu-item"><span>9pc Nuggets - R40</span> <button onclick="addToCart('9pc Nuggets', 40)">Add</button></div>
+    </div>
+  </section>
+
+  <section id="cart">
+    <h3>Your Cart</h3>
+    <div id="cart-items"></div>
+    <div class="cart-summary" id="cart-total">Total: R0</div>
+  </section>
+
+  <section id="checkout-form">
+    <h3>Checkout & Payment</h3>
+    <form action="https://formspree.io/f/yourFormID" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="_replyto" placeholder="Your Email" required />
+      <textarea name="order" placeholder="What’s in your cart?" id="order-summary" rows="5" required></textarea>
+      <button type="submit">Submit Order</button>
+    </form>
+  </section>
+
+  <section id="our-story">
+    <h3>Our Story</h3>
+    <p>J-Eats was started by 7 young locals from Khayelitsha. We’re passionate about street flavour, good prices, and building a food movement from the ground up. Every burger, wrap, and nugget is made with hustle, love, and serious township pride.</p>
+  </section>
+
+  <section id="location">
+    <h3>Where We At</h3>
+    <p>You can find us in Khayelitsha, Western Cape. Collection only for now – we’re working on delivery soon!</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Julia Eats | Designed with heart in Khayelitsha</p>
+  </footer>
+
+  <script>
+    let cart = [];
+
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      updateCart();
+      document.getElementById("item-added-popup").style.display = "block";
+      setTimeout(() => {
+        document.getElementById("item-added-popup").style.display = "none";
+      }, 2000);
+    }
+
+    function updateCart() {
+      let cartItems = document.getElementById("cart-items");
+      let cartTotal = document.getElementById("cart-total");
+      let orderSummary = document.getElementById("order-summary");
+      cartItems.innerHTML = "";
+      let total = 0;
+      let summaryText = "";
+
+      cart.forEach((c, index) => {
+        total += c.price;
+        summaryText += `${c.item} - R${c.price}\n`;
+
+        cartItems.innerHTML += `
+          <div class="cart-item">
+            <span>${c.item} - R${c.price}</span>
+            <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+          </div>`;
+      });
+
+      cartTotal.innerText = `Total: R${total}`;
+      orderSummary.value = summaryText + `Total: R${total}`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function signUp() {
+      document.getElementById("signup-popup").style.display = "none";
+    }
+  </script>
+</body>
+</html>
